@@ -3,6 +3,7 @@ package me.mani.open2d.game;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +13,7 @@ import me.mani.open2d.game.map.Map;
 public class Game {
 
 	private static Game instance;
+	public static int currentFrame = 0;
 	
 	private String playerName;
 	private Player player;
@@ -40,7 +42,7 @@ public class Game {
 	}
 	
 	public Set<GameObject> getGameObjects() {
-		return gameObjects;
+		return new HashSet<>(gameObjects);
 	}
 	
 	public void updateAll(long delta) {
@@ -50,6 +52,7 @@ public class Game {
 	
 	public void drawAll(Graphics g) {
 		Graphics b = buffer.getGraphics();
+		((Graphics2D) b).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		((Graphics2D) b).setBackground(Color.WHITE);
 		b.clearRect(0, 0, screen.getWidth(), screen.getHeight());

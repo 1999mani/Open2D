@@ -3,6 +3,9 @@ package me.mani.open2d.game;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.util.Iterator;
+
+import me.mani.open2d.Collision;
 
 public class Player extends GameObject implements KeyControlable, MouseControlable {
 
@@ -17,29 +20,29 @@ public class Player extends GameObject implements KeyControlable, MouseControlab
 
 	@Override
 	public void update(long delta) {
-		for (int i = 0; i <= 1; i++) {
+		for (int i = 0; i <= 3; i++) {
 			if (isMovingUp) {
 				y--;
-				if (Game.getInstance().getMap().checkCollision(this))
+				if (Game.getInstance().getMap().checkCollision(this) != Collision.NONE)
 					y++;
 			}
 			if (isMovingDown) {
 				y++;
-				if (Game.getInstance().getMap().checkCollision(this))
+				if (Game.getInstance().getMap().checkCollision(this) != Collision.NONE)
 					y--;
 			}
 			if (isMovingLeft) {
 				x--;
-				if (Game.getInstance().getMap().checkCollision(this))
+				if (Game.getInstance().getMap().checkCollision(this) != Collision.NONE)
 					x++;
 			}
 			if (isMovingRight) {
 				x++;
-				if (Game.getInstance().getMap().checkCollision(this))
+				if (Game.getInstance().getMap().checkCollision(this) != Collision.NONE)
 					x--;
 			}
 		}
-		if (isShooting)
+		if (isShooting && Game.currentFrame % 3 == 0)
 			Game.getInstance().registerObject(new Arrow(
 				x + getTexture().getImage().getWidth() / 2,
 				y + getTexture().getImage().getHeight() / 2,
@@ -72,6 +75,19 @@ public class Player extends GameObject implements KeyControlable, MouseControlab
 			break;
 		case KeyEvent.VK_D:
 			isMovingRight = down;
+			break;
+		case KeyEvent.VK_1:
+			Iterator<GameObject> it = Game.getInstance().getGameObjects().iterator();
+			GameObject obj = null;
+			while (true) {
+				if (!it.hasNext())
+					break;
+				obj = it.next();
+				if (!(obj instanceof Arrow))
+					continue;
+				((Arrow) obj).destroy();
+				break;
+			}
 			break;
 		}
 	}

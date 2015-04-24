@@ -18,11 +18,15 @@ public class RenderTask implements Runnable {
 	public void run() {
 		long lastTime = System.currentTimeMillis();
 		while (true) {
+			lastTime = System.currentTimeMillis();
+			if (Game.currentFrame >= 1000)
+				Game.currentFrame = 0;
+			else
+				Game.currentFrame++;
 			synchronized (game.getGameObjects()) {
 				game.updateAll(System.currentTimeMillis() - lastTime);
 				game.getScreen().repaint();
 			}
-			lastTime = System.currentTimeMillis();
 			try {
 				Thread.sleep(1000 / 60);
 			} catch (InterruptedException e) {

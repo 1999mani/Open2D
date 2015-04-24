@@ -3,6 +3,8 @@ package me.mani.open2d.game;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import me.mani.open2d.Collision;
+
 public class Arrow extends GameObject {
 
 	private int size = 10;
@@ -19,8 +21,14 @@ public class Arrow extends GameObject {
 		y += Math.sin(Math.toRadians(rotation)) * 4;
 		if (size <= 0 || x < 0 || x > Game.getInstance().getScreen().getWidth() || y < 0 || y > Game.getInstance().getScreen().getHeight())
 			destroy();
-		if (Game.getInstance().getMap().checkCollision(this))
-			size--;
+		Collision coll = Game.getInstance().getMap().checkCollision(this);
+		if (coll == Collision.LEFT || coll == Collision.RIGHT)
+			rotation = 180 - rotation;
+		else if (coll == Collision.TOP || coll == Collision.BOTTOM)
+			rotation = 360 - rotation;
+		else if (coll == Collision.UNKNOWN)
+			rotation += 180;
+//			size--;
 	}
 	
 	@Override
